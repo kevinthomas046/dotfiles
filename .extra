@@ -1,0 +1,59 @@
+#################################
+#         EXPORTS               #
+#################################
+# Setup NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+
+
+#################################
+#         FUNCTIONS             #
+#################################
+# Swap files
+function swap() {
+    local TMPFILE=tmp.$$
+    mv "$1" $TMPFILE && mv "$2" "$1" && mv $TMPFILE $2
+}
+
+# Trim Training Videos
+function trimTrainingVid() {
+    echo "ffmpeg -i $1 -ss $2 -to $3 VID_$1"
+    if [ -z "$1" -o -z "$2" -o -z "$3" ]; then
+        echo "Missing params";
+        return 1;
+    fi;
+    ffmpeg -i "$1" -ss "$2" -to "$3" VID_"$1"
+}
+
+# Automatically call nvm use
+cdnvm() {
+  command cd "$@" || return $?
+  nvmrc_path="$(nvm_find_nvmrc)"
+
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
+      nvm use
+    fi
+  fi
+}
+
+#################################
+#         ALIASES               #
+#################################
+alias gonafta="cd /Users/kevthoma/Work/MercedesBenz/OneWeb/now-aem"
+alias goplnafta="cd /Users/kevthoma/Work/MercedesBenz/OneWeb/now-aem/ui.apps/src/main/resources/presentation"
+alias endspam="sudo launchctl unload /Library/LaunchDaemons/com.websense.endpoint.dlp.daemon.plist && sudo launchctl unload /Library/LaunchDaemons/com.websense.endpoint.dlp.boot.plist"
+alias youtube-dl="python3 /Users/kevthoma/Work/Tools/youtube-dl"
+alias cd='cdnvm'
+
+#################################
+#         EXPORTS               #
+#################################
+source ~/tmp/git-completion.bash
+
+cd "$PWD"
