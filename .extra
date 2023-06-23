@@ -54,6 +54,6 @@ alias cd='cdnvm'
 #################################
 #         EXPORTS               #
 #################################
-source ~/tmp/git-completion.bash
+source ~/.git_completion
 
 cd "$PWD"
